@@ -44,6 +44,7 @@ struct le_window_o {
 
 	WindowGeometry windowGeometry{};
 	bool           isFullscreen = false;
+    bool           isDecorated = true;
 };
 
 // ----------------------------------------------------------------------
@@ -302,6 +303,13 @@ static void window_toggle_fullscreen( le_window_o *self ) {
 		glfwSetWindowMonitor( self->window, fullscreenMonitor, 0, 0, videoMode->width, videoMode->height, videoMode->refreshRate );
 		self->isFullscreen = true;
 	}
+}
+
+// ----------------------------------------------------------------------
+
+static void window_toggle_decorated( le_window_o *self ) {
+    self->isDecorated = !self->isDecorated;
+    glfwSetWindowAttrib( self->window, GLFW_DECORATED, self->isDecorated );
 }
 
 // ----------------------------------------------------------------------
@@ -565,6 +573,7 @@ LE_MODULE_REGISTER_IMPL( le_window, api ) {
 	window_i.get_glfw_window          = window_get_glfw_window;
 
 	window_i.toggle_fullscreen  = window_toggle_fullscreen;
+	window_i.toggle_decorated   = window_toggle_decorated;
 	window_i.get_ui_event_queue = window_get_ui_event_queue;
 
 	auto &window_settings_i      = windowApi->window_settings_i;
